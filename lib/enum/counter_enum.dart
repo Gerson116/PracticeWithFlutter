@@ -1,0 +1,4 @@
+enum CounterEnum{
+  plus,
+  subtract
+}

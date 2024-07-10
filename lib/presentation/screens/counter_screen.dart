@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/enum/counter_enum.dart';
 
 class CounterScreen extends StatefulWidget {
   const CounterScreen({super.key});
@@ -26,7 +27,7 @@ class _CounterScreenState extends State<CounterScreen> {
               icon: const Icon(Icons.restart_alt_rounded),
               onPressed: () {
                 //...
-                setState(() {                  
+                setState(() {
                   counter = 0;
                   changeClickMessage(counter: counter);
                 });
@@ -52,36 +53,11 @@ class _CounterScreenState extends State<CounterScreen> {
         floatingActionButton: Column(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            FloatingActionButton(
-              onPressed: () {
-                //...In this method or function, I can execute logic
-                setState(() {
-                  counter += 1;
-                  changeClickMessage(counter: counter);
-                });
-              },
-              backgroundColor: const Color.fromARGB(255, 247, 104, 93),
-              child: const Icon(
-                Icons.add_outlined,
-                color: Color.fromARGB(255, 248, 247, 247),
-              ),
-            ),
+            counterButtons(counter: counter, actionId: CounterEnum.plus),
             const SizedBox(
               height: 15,
             ),
-            FloatingActionButton(
-              onPressed: () {
-                setState(() {
-                  counter -= 1;
-                  changeClickMessage(counter: counter);
-                });
-              },
-              backgroundColor: const Color.fromARGB(255, 247, 104, 93),
-              child: const Icon(
-                Icons.remove_outlined,
-                color: Color.fromARGB(255, 248, 247, 247),
-              ),
-            )
+            counterButtons(counter: counter, actionId: CounterEnum.subtract)
           ],
         ));
   }
@@ -90,8 +66,43 @@ class _CounterScreenState extends State<CounterScreen> {
     if (counter == 1) {
       clicks = "Click";
     }
-    if (counter == 0 || counter > 1) {
+    if (counter == 0) {
       clicks = "Clicks";
     }
+    if (counter > 1) {
+      clicks = "Clicks";
+    }
+  }
+
+  FloatingActionButton counterButtons(
+      {required int counter, required CounterEnum actionId}) {
+    Icon iconSelect = (actionId == CounterEnum.plus)
+        ? const Icon(
+            Icons.add_outlined,
+            color: Color.fromARGB(255, 248, 247, 247),
+          )
+        : const Icon(
+            Icons.remove_outlined,
+            color: Color.fromARGB(255, 248, 247, 247),
+          );
+    return FloatingActionButton(
+      onPressed: () {
+        //...In this method or function, I can execute logic
+        setState(() {
+          if (actionId == CounterEnum.plus) {
+            //...
+            this.counter++;
+            changeClickMessage(counter: counter);
+          }
+          if (actionId == CounterEnum.subtract && this.counter > 0) {
+            //...
+            this.counter--;
+            changeClickMessage(counter: counter);
+          }
+        });
+      },
+      backgroundColor: const Color.fromARGB(255, 247, 104, 93),
+      child: iconSelect,
+    );
   }
 }
